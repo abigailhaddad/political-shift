@@ -12,12 +12,12 @@ import duckdb
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir
 
-from common import BASE, DATA, END, OUT, POLITICAL_SQL, RAW, RAW_SEP
+from common import BASE, DATA, END, OUT, POLITICAL_SQL, RAW, RAW_SEP, TAG
 
 
 def main():
     c = duckdb.connect()
-    h = c.sql(f"select * from '{DATA / 'subelement_headcount.parquet'}'").df()
+    h = c.sql(f"select * from '{DATA / f'subelement_headcount{TAG}.parquet'}'").df()
     w = h.pivot_table(index=["agency_code", "agency_subelement_code"], columns="f",
                       values=["political", "sched_c", "sched_pc", "nonpol_ex1102"], fill_value=0)
     w.columns = [f"{a}_{b}" for a, b in w.columns]
@@ -41,7 +41,7 @@ def main():
     w["recode_gap"] = w.nonpol_change - (w.hires - w.seps)
     w["recode_gap_pct"] = (100 * w.recode_gap / w[f"nonpol_ex1102_{BASE}"]).round(1)
     w["political_up_nonpol_down"] = (w.political_change > 0) & (w.nonpol_change < 0)
-    w.sort_values("political_change", ascending=False).to_csv(OUT / "political_shift_by_office.csv", index=False)
+    w.sort_values("political_change", ascending=False).to_csv(OUT / f"political_shift_by_office{TAG}.csv", index=False)
     print(w[w.political_up_nonpol_down].shape[0], "subelements with political up and non-political down")
 
 

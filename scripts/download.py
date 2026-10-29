@@ -8,13 +8,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir
 
-from common import BASE, DATA, RAW, RAW_SEP
+from common import BASE, DATA, END, RAW, RAW_SEP, TAG
 
 REPO = "https://huggingface.co/datasets/impactproject/opm-ehri-data"
 # dataset -> (output dir, month filter)
 PULLS = {
-    "accessions": (RAW, lambda m: m > BASE),
-    "separations": (RAW_SEP, lambda m: m > BASE),
+    "accessions": (RAW, lambda m: BASE < m <= END),
+    "separations": (RAW_SEP, lambda m: BASE < m <= END),
 }
 
 
@@ -56,7 +56,7 @@ def pull(dataset, out, keep):
 
 def main():
     used = {dataset: pull(dataset, out, keep) for dataset, (out, keep) in PULLS.items()}
-    (DATA / "files_used.json").write_text(json.dumps(used, indent=1))
+    (DATA / f"files_used{TAG}.json").write_text(json.dumps(used, indent=1))
 
 
 if __name__ == "__main__":

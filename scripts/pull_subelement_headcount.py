@@ -8,7 +8,7 @@ import duckdb
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))  # -I drops the script dir
 
-from common import BASE, DATA, END, POLITICAL_SQL
+from common import BASE, DATA, END, POLITICAL_SQL, TAG
 from download import REPO, list_tree
 
 MONTHS = [BASE, END]
@@ -49,8 +49,10 @@ def main():
                 time.sleep(10 * (attempt + 1))
         else:
             raise RuntimeError(f"could not read {name}")
-    c.sql(f"copy (select * from read_parquet('{parts}/*.parquet')) to '{DATA / 'subelement_headcount.parquet'}' (format parquet)")
-    print(c.sql(f"select f, file, sum(total) total, sum(political) political from '{DATA / 'subelement_headcount.parquet'}' group by all order by f"))
+    combined = DATA / f"subelement_headcount{TAG}.parquet"
+    files = ", ".join(f"'{parts / f'{m}.parquet'}'" for m in MONTHS)
+    c.sql(f"copy (select * from read_parquet([{files}])) to '{combined}' (format parquet)")
+    print(c.sql(f"select f, file, sum(total) total, sum(political) political from '{combined}' group by all order by f"))
 
 
 if __name__ == "__main__":

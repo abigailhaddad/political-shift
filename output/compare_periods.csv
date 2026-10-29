@@ -1,0 +1,4 @@
+period,base,end,political_base,political_end,sched_c_base,sched_c_end,career_base,career_end,offices_political_up_career_down,offices_political_up5_career_down,hhs_os_political_base,hhs_os_political_end,hhs_os_career_pct_change,hhs_os_recode_gap_pct,political_pct_change,sched_c_pct_change,career_pct_change
+Obama -> Trump 1,201610,201808,3029.0,2483.0,1509.0,1173.0,2047038.0,2062207.0,35,4,101.0,110.0,-27.6,-12.6,-18.0,-22.3,0.7
+Trump 1 -> Biden,202010,202208,3138.0,2899.0,1639.0,1386.0,2129713.0,2132684.0,20,1,117.0,103.0,75.2,66.3,-7.6,-15.4,0.1
+Biden -> Trump 2,202410,202608,3151.0,3523.0,1610.0,2089.0,2265826.0,1983995.0,83,28,118.0,159.0,-24.1,8.3,11.8,29.8,-12.4
